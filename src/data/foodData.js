@@ -1,0 +1,111 @@
+import image from "@/assets/images/image2.png";
+
+const foodData = [
+  {
+    name: "Đùi gà rán - Quán gà ốm",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 45000,
+    imageUrl: image,
+  },
+  {
+    name: "Đùi gà rán - Quán gà mập",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 45000,
+    imageUrl: image,
+  },
+  {
+    name: "Đùi gà rán đặc biệt",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 49000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà cay Hàn Quốc",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 55000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà rán vị phô mai",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 52000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà giòn sốt cay",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 53000,
+    imageUrl: image,
+  },
+  {
+    name: "Cơm gà xối mỡ",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 47000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà rán tẩm mật ong",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 54000,
+    imageUrl: image,
+  },
+  {
+    name: "Cánh gà chiên nước mắm",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 50000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà viên phô mai",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 49000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà chiên xù giòn tan",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 48000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà xiên nướng BBQ",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 55000,
+    imageUrl: image,
+  },
+  {
+    name: "Cơm gà Hainanese",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 52000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà sốt Teriyaki",
+    store: "Quán gà mập",
+    address: "25 Hà Huy Tập",
+    price: 53000,
+    imageUrl: image,
+  },
+  {
+    name: "Gà viên chiên giòn",
+    store: "Quán gà ốm",
+    address: "25 Hà Huy Tập",
+    price: 46000,
+    imageUrl: image,
+  },
+];
+
+export default foodData;
