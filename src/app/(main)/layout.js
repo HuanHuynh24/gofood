@@ -6,8 +6,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <HeaderMain />
-         <CartProvider>{children}</CartProvider>
+        <CartProvider>
+          <HeaderMain />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { toSlug } from "@/lib/slugify";
 
-export default function FoodCard({ name, price,address,  store, imageUrl }) {
+export default function FoodCard({ name, price, address, store, imageUrl }) {
   return (
     <div className="h-[320px] bg-[#fdfbf5] rounded-lg shadow-md overflow-hidden">
       <div className="w-full h-40 relative">
