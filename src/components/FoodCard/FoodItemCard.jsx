@@ -86,11 +86,10 @@ export default function FoodItemCard({ name, price, imageUrl }) {
             <button
               key={size}
               onClick={() => handleSizeClick(size)}
-              className={`w-7 h-7 px-2 py-1 text-sm rounded-full border ${
-                selectedSize === size
-                  ? "bg-gray-700 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
+              className={`w-7 h-7 px-2 py-1 text-sm rounded-full border ${selectedSize === size
+                ? "bg-gray-700 text-white"
+                : "bg-gray-200 text-gray-700"
+                }`}
             >
               {size}
             </button>
