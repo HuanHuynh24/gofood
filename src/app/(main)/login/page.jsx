@@ -6,6 +6,12 @@ import image1 from "@/assets/images/image1.png";
 import Link from "next/link";
 export default function Login() {
   const router = useRouter();
+  const accounts = {
+    "khachhang":"123",
+    "admin":"123",
+    "giaohang":"123",
+    "banhang":"123"
+  }
 
   const handleLogin = () => {
     document.cookie = "token=sample_token; path=/";
