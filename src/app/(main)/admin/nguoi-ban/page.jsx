@@ -5,7 +5,42 @@ import UserDetailDialog from "@/components/UserDetailDialog";
 
 export default function NguoiBanPage() {
     const [sellers, setSellers] = useState(nguoiBanHangData);
+    const [filteredSellers, setFilteredSellers] = useState(nguoiBanHangData);
     const [selectedSeller, setSelectedSeller] = useState(null);
+    const [sortOrder, setSortOrder] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSearch = () => {
+        const result = sellers.filter((seller) =>
+            seller.hoTen.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredSellers(result);
+    };
+
+    const handleSortChange = (e) => {
+        const order = e.target.value;
+        setSortOrder(order);
+        const sorted = [...filteredSellers].sort((a, b) => {
+            const nameA = a.hoTen.toLowerCase();
+            const nameB = b.hoTen.toLowerCase();
+            if (nameA < nameB) return order === "asc" ? -1 : 1;
+            if (nameA > nameB) return order === "asc" ? 1 : -1;
+            return 0;
+        });
+        setFilteredSellers(sorted);
+    };
+
+    const handleApprove = (seller) => {
+        const updated = sellers.map((s) =>
+            s.idNguoiBanHang === seller.idNguoiBanHang
+                ? { ...s, trangThai: "Đã duyệt" }
+                : s
+        );
+        setSellers(updated);
+        setFilteredSellers(updated);
+        setSelectedSeller(null);
+        alert(`✅ Đã duyệt người bán hàng: ${seller.hoTen}`);
+    };
 
     const columns = [
         { header: "ID", key: "idNguoiBanHang" },
@@ -38,51 +73,72 @@ export default function NguoiBanPage() {
         },
     ];
 
-    const handleApprove = (seller) => {
-        const updated = sellers.map((s) =>
-            s.idNguoiBanHang === seller.idNguoiBanHang
-                ? { ...s, trangThai: "Đã duyệt" }
-                : s
-        );
-        setSellers(updated);
-        setSelectedSeller(null);
-        alert(`✅ Đã duyệt người bán hàng: ${seller.hoTen}`);
-    };
-
     return (
-        <div className="flex flex-col p-4 gap-4">
-            <h1 className="text-2xl font-bold text-blue-600">🚚 Danh sách người bán hàng</h1>
+        <div className="flex gap-6 p-4">
+            <main className="flex-1 bg-white rounded-lg shadow-md p-6">
+                <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-3">
+                    <h1 className="text-2xl font-bold text-blue-600">🛍️ Danh sách người bán hàng</h1>
+                </div>
 
-            <div className="w-full overflow-x-auto rounded border border-gray-200">
-                <table className="w-full min-w-[1000px] table-auto border-collapse text-sm">
-                    <thead className="bg-gray-100 text-gray-700">
-                        <tr>
-                            {columns.map((col, idx) => (
-                                <th key={idx} className="border p-2 text-left">{col.header}</th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sellers.length > 0 ? (
-                            sellers.map((row) => (
-                                <tr key={row.idNguoiBanHang} className="hover:bg-gray-50">
-                                    {columns.map((col, index) => (
-                                        <td key={index} className="border p-2 text-center align-top">
-                                            {col.key === "action" ? col.render(row) : row[col.key]}
-                                        </td>
-                                    ))}
-                                </tr>
-                            ))
-                        ) : (
+                <div className="mb-4 flex flex-col md:flex-row items-center gap-3">
+                    <input
+                        type="text"
+                        className="border px-3 py-2 rounded w-full md:w-1/3"
+                        placeholder="Nhập họ tên người bán..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        onClick={handleSearch}
+                    >
+                        🔍 Tìm kiếm
+                    </button>
+
+                    <select
+                        className="border px-3 py-2 rounded"
+                        value={sortOrder || ""}
+                        onChange={handleSortChange}
+                    >
+                        <option value="">Sắp xếp tên</option>
+                        <option value="asc">A-Z</option>
+                        <option value="desc">Z-A</option>
+                    </select>
+                </div>
+
+                <div className="overflow-x-auto rounded-lg shadow border border-gray-200">
+                    <table className="w-full min-w-[1000px] table-auto border-collapse text-sm">
+                        <thead className="bg-gray-100">
                             <tr>
-                                <td colSpan={columns.length} className="text-center py-4">
-                                    Không có dữ liệu người bán hàng.
-                                </td>
+                                {columns.map((col, index) => (
+                                    <th key={index} className="p-3 border text-left">
+                                        {col.header}
+                                    </th>
+                                ))}
                             </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            {filteredSellers.length > 0 ? (
+                                filteredSellers.map((row) => (
+                                    <tr key={row.idNguoiBanHang} className="bg-white hover:bg-gray-50 transition-all">
+                                        {columns.map((col, colIndex) => (
+                                            <td key={colIndex} className="p-3 border text-center">
+                                                {col.key === "action" ? col.render(row) : row[col.key]}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={columns.length} className="p-4 text-center text-gray-500">
+                                        Không có dữ liệu người bán hàng.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
 
             {selectedSeller && (
                 <UserDetailDialog

@@ -1,18 +1,41 @@
-// pages/admin/AdminPage.jsx
 "use client";
 import { useState } from "react";
 import customersData from "@/data/customers";
 import UserDetailDialog from "@/components/UserDetailDialog";
 
-export default function AdminPage() {
+export default function KhacHang() {
     const [customers, setCustomers] = useState(customersData);
+    const [filteredCustomers, setFilteredCustomers] = useState(customersData);
     const [editingCustomer, setEditingCustomer] = useState(null);
+    const [sortOrder, setSortOrder] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const handleSortChange = (e) => {
+        const order = e.target.value;
+        setSortOrder(order);
+        const sorted = [...filteredCustomers].sort((a, b) => {
+            const nameA = a.hoTen.toLowerCase();
+            const nameB = b.hoTen.toLowerCase();
+            if (nameA < nameB) return order === "asc" ? -1 : 1;
+            if (nameA > nameB) return order === "asc" ? 1 : -1;
+            return 0;
+        });
+        setFilteredCustomers(sorted);
+    };
+
+    const handleSearch = () => {
+        const result = customers.filter((kh) =>
+            kh.hoTen.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredCustomers(result);
+    };
 
     const handleDelete = (id) => {
         const confirmDelete = window.confirm("Bạn có chắc chắn muốn xoá không?");
         if (confirmDelete) {
             const updated = customers.filter((khach) => khach.idKhachHang !== id);
             setCustomers(updated);
+            setFilteredCustomers(updated);
         }
     };
 
@@ -21,6 +44,7 @@ export default function AdminPage() {
             kh.idKhachHang === updatedCustomer.idKhachHang ? updatedCustomer : kh
         );
         setCustomers(updatedList);
+        setFilteredCustomers(updatedList);
         setEditingCustomer(null);
     };
 
@@ -61,6 +85,32 @@ export default function AdminPage() {
                     <h1 className="text-2xl font-bold text-blue-600">🧑‍💼 Danh sách khách hàng</h1>
                 </div>
 
+                <div className="mb-4 flex flex-col md:flex-row items-center gap-3">
+                    <input
+                        type="text"
+                        className="border px-3 py-2 rounded w-full md:w-1/3"
+                        placeholder="Nhập tên khách hàng cần tìm..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        onClick={handleSearch}
+                    >
+                        🔍 Tìm kiếm
+                    </button>
+
+                    <select
+                        className="border px-3 py-2 rounded"
+                        value={sortOrder || ""}
+                        onChange={handleSortChange}
+                    >
+                        <option value="">Sắp xếp tên</option>
+                        <option value="asc">A-Z</option>
+                        <option value="desc">Z-A</option>
+                    </select>
+                </div>
+
                 <div className="overflow-x-auto rounded-lg shadow border border-gray-200">
                     <table className="w-full table-auto border-collapse">
                         <thead className="bg-gray-100">
@@ -73,8 +123,8 @@ export default function AdminPage() {
                             </tr>
                         </thead>
                         <tbody>
-                            {customers.length > 0 ? (
-                                customers.map((row) => (
+                            {filteredCustomers.length > 0 ? (
+                                filteredCustomers.map((row) => (
                                     <tr key={row.idKhachHang} className="bg-white hover:bg-gray-50 transition-all">
                                         {columns.map((col, colIndex) => (
                                             <td key={colIndex} className="p-3 border text-center">
