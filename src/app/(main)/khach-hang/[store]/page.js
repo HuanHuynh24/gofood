@@ -11,7 +11,12 @@ export async function generateStaticParams() {
     store: toSlug(store),
   }));
 }
-
+const menuLists = [
+  { label: "Đơn hàng", url: "/khach-hang" },
+  { label: "Xem thông tin đơn hàng", url: "/khach-hang/chi-tiet-don-hang" },
+  { label: "Cài đặt", url: "/khach-hang/cai-dat" },
+  { label: "Đăng xuất", url: "/logout" },
+];
 export default async function StoreMenu({ params }) {
   const storeSlug = params.store;
 
@@ -23,7 +28,7 @@ export default async function StoreMenu({ params }) {
 
   return (
     <div className="flex gap-[30px]">
-      <Sidebar />
+      <Sidebar menuItems={menuLists} />
       <main className="pr-[30px]">
         <div className="p-4">
           <div className="flex justify-between">

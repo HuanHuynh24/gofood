@@ -21,7 +21,7 @@ export default function FoodCard({ name, price, address, store, imageUrl }) {
         <div className="flex items-center justify-between mt-3">
           <span className="text-lg font-semibold text-gray-800">{price}Đ</span>
           <button className="px-3 py-1 text-sm bg-white border border-gray-300 rounded hover:bg-gray-100">
-            <Link href={`/${toSlug(store)}`}>Đặt đơn</Link>
+            <Link href={`/khach-hang/${toSlug(store)}`}>Đặt đơn</Link>
           </button>
         </div>
       </div>

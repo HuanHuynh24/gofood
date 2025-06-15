@@ -4,19 +4,49 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import image1 from "@/assets/images/image1.png";
 import Link from "next/link";
+import { useState } from "react";
+
 export default function Login() {
   const router = useRouter();
+
+  // Dữ liệu giả lập tài khoản: key là số điện thoại
   const accounts = {
-    "khachhang":"123",
-    "admin":"123",
-    "giaohang":"123",
-    "banhang":"123"
-  }
+    "0909123456": { otp: "123", role: "khachhang" },
+    "0911123456": { otp: "123", role: "admin" },
+    "123": { otp: "123", role: "giaohang" },
+    "0933123456": { otp: "123", role: "banhang" },
+  };
+
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
 
   const handleLogin = () => {
-    document.cookie = "token=sample_token; path=/";
-    router.push("/");
+    const trimmedPhone = phone.trim();
+    const trimmedOtp = otp.trim();
+    const account = accounts[trimmedPhone];
+
+    if (account && account.otp === trimmedOtp) {
+      document.cookie = "token=sample_token; path=/";
+
+      // Điều hướng theo role
+      switch (account.role) {
+        case "khachhang":
+          router.push("/khach-hang");
+          break;
+        case "giaohang":
+          router.push("/giao-hang");
+          break;
+        case "banhang":
+          router.push("/banhang");
+          break;
+        default:
+          router.push("/");
+      }
+    } else {
+      alert("Sai số điện thoại hoặc mã OTP");
+    }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#fdfaf4] px-4">
       <div className="flex flex-col md:flex-row items-center justify-between gap-10 max-w-4xl w-full">
@@ -38,12 +68,16 @@ export default function Login() {
             <input
               type="text"
               placeholder="Số điện thoại"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
             />
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Mã OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
                 className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
               <button className="bg-[#f4e6c4] px-4 py-2 rounded text-sm font-semibold">
@@ -51,7 +85,7 @@ export default function Login() {
               </button>
             </div>
             <button
-              className="w-full bg-[#f4e6c4] py-2 rounded font-semibold hover:opacity-90 hover:cursor-pointer" 
+              className="w-full bg-[#f4e6c4] py-2 rounded font-semibold hover:opacity-90 hover:cursor-pointer"
               onClick={handleLogin}
             >
               Đăng nhập

@@ -1,14 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Cookies from "js-cookie"; // 👈 Thêm dòng này
 import Sidebar from "@/components/Sidebar/Sidebar";
 import OrderDialog from "@/components/OrderDialog";
 import CheckoutForm from "@/components/CheckoutForm";
+
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
   const [showDialog, setShowDialog] = useState(false);
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -24,22 +25,47 @@ export default function CartPage() {
   };
 
   const handleConfirmOrder = () => {
-    setShowDialog(false); // ẩn OrderDialog
-    setShowCheckoutForm(true); // hiện CheckoutForm
+    setShowDialog(false);
+    setShowCheckoutForm(true);
   };
 
   const handleSubmitOrder = (formData) => {
-    console.log("Dữ liệu đơn hàng:", formData);
+    // 👉 Tạo thông tin đơn hàng để lưu
+    const newOrder = {
+      id: "ORD" + Date.now(), // tạo mã đơn hàng đơn giản
+      address: formData.address,
+      customerName: formData.name,
+      phone: formData.phone,
+      items: cartItems,
+      total: cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      ),
+      createdAt: new Date().toISOString(),
+    };
+
+    // 👉 Lưu vào cookie để xem lại
+    Cookies.set("latestOrder", JSON.stringify(newOrder), { expires: 1 / 24 }); // 1 giờ
+
     alert("Đặt hàng thành công!");
     localStorage.removeItem("cart");
     setCartItems([]);
     setShowCheckoutForm(false);
+
+    // 👉 Có thể điều hướng đến trang chi tiết đơn hàng nếu muốn
+    // router.push("/giao-hang/chi-tiet-don-hang");
   };
 
+  const menuItems = [
+    { label: "Đơn hàng", url: "/khach-hang" },
+    { label: "Xem thông tin đơn hàng", url: "/khach-hang/chi-tiet-don-hang" },
+    { label: "Cài đặt", url: "/khach-hang/cai-dat" },
+    { label: "Đăng xuất", url: "/logout" },
+  ];
 
   return (
     <div className="flex gap-[30px] bg-white min-h-screen">
-      <Sidebar className={"w-2/12"} />
+      <Sidebar menuItems={menuItems} className={"w-2/12"} />
       <main className="p-4 w-10/12">
         <h1 className="text-2xl font-bold mb-4">Giỏ hàng</h1>
         {cartItems.length === 0 ? (
@@ -86,12 +112,14 @@ export default function CartPage() {
 
         {showCheckoutForm && (
           <CheckoutForm
-            total={cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)}
+            total={cartItems.reduce(
+              (sum, item) => sum + item.price * item.quantity,
+              0
+            )}
             onSubmit={handleSubmitOrder}
             onClose={() => setShowCheckoutForm(false)}
           />
         )}
-
       </main>
     </div>
   );
