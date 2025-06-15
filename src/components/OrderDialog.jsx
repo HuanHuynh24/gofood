@@ -7,8 +7,6 @@ export default function OrderDialog({ cart, onClose, onConfirm }) {
 
     return (
         <div className="fixed inset-0 flex justify-center items-center bg-black/20 z-[9999]">
-
-
             <div className="bg-white rounded-lg p-6 w-[500px] relative z-[10000] shadow-xl">
                 <button
                     onClick={onClose}
